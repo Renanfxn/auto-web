@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-# Instalação de servidor automatizado
-#
+# Instalação de servidor automatizado 
+#Feito por Renan Santos de Souza do 2 semestre de Redes de Computadores da Rede SENAI Jandira
+#Data realizada o script em casa: 29/09/2023
 # Cvs $header$
 # DECLARAR VARIAVEL
 shopt -s -o nounset
@@ -22,50 +23,49 @@ fi
 
 # upgrade
 echo "Atualizando com apt-get"
-apt-get update -y && apt-get upgrade
+apt-get update -y
 
-# validar se servidor já existe
-if ! command -v apache2; then
-  echo "Apache não instalado"
-  echo "Instalando servidor..."
-  apt-get install apache2 -y
-  sleep 2
-else
-  echo "Apache instalado"
-fi
+#MENU
+echo "Menu WEB
+1)Instalação do servidor
+2)Desinstalar servidor
+3)Iniciar servidor
+4)Parar servidor
+5)Reiciar servidor
+6)Informações do servidor
+7)Sair
+Escolha uma opção: "
+read OPC
 
-# Diretório
-if [[ ! -d "$server_root" ]]; then
-  echo "Diretório do servidor"
-  mkdir -p "$server_root"
-fi
+function install () {
+    echo "Instalando servidor"; apt-get install apache2; sleep 2; clear; echo "Servidor Instalado!!"
+}
+function purge () {
+    echo "Desinstalando Servidor!!"; apt-get purge apache2 -y; sleep 2; clear; echo "Servidor Desinstalado!!"
+}
+function start() {
+    echo "Iniciando Servidor!!"; systemctl start apache2; sleep 2; clear; echo "Servidor Iniciado!!"
+}
+function stop () {
+    echo "Parando Servidor!!"; systemctl stop apache2; sleep 2; clear; echo "Servidor Inativo!!"
+}
+function restart (){
+    echo "Reiniciando Servidor!!"; systemctl restart apache2; sleep 2; clear; echo "Servidor Reinicado!!"
+}
+function status () {
+    echo "Informações do Servidor!!"; systemctl status apache2; sleep 4; clear; echo "Informações exibidas!!"
+}
+function exit () {
+    echo "Saindo do Menu..."; sleep 2;
+}
 
-# arquivo index
-if [[ ! -f "$server_root/$index_page" ]]; then
-  echo "Criando página de início"
-  sleep 2
-fi
-
-# Iniciar servidor
-echo "Iniciando servidor na porta $server_port..."
-apt-get install apache2
-systemctl start apache2
-
-# Feature git
-echo "Instalando Git..."
-sleep 1
-apt-get install git
-
-# Clone de link do github
-echo "Entrando em pasta raiz..."
-cd /var/www/html
-sleep 3
-
-# Clonando o git
-git clone "https://github.com/Renanfxn/JujutsuKaisen.git"
-
-# cp
-if [[ ! -d "$server_root" ]]; then
-  cp -rfp JujutsuKaisen/* /var/www/html
-  sleep 3
-fi
+case $OPC in
+1) install;;
+2) purge;;
+3) start;;
+4) stop;;
+5) restart;;
+6) status;;
+7) exit;;
+*) echo "Opção Invalida";;
+esac
