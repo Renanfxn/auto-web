@@ -23,7 +23,20 @@ fi
 
 # upgrade
 echo "Atualizando com apt-get"
+echo "Deseja continuar a atualizaçaão (sim/não)?"
+read resposta
+if [ "$resposta" = "sim"]; then 
+echo "Atualizando maquina..."
 apt-get update -y
+sleep 2
+elif [ "$resposta" = "não"]; then
+else
+    echo "Escolha uma opção valida. Escolha a opção 'sim' ou 'não'"
+fi
+sleep 2
+
+echo "Indo para o Menu WEB"
+sleep 1
 
 #MENU
 echo "Menu WEB
@@ -56,7 +69,7 @@ function status () {
     echo "Informações do Servidor!!"; systemctl status apache2; sleep 4; clear; echo "Informações exibidas!!"
 }
 function exit () {
-    echo "Saindo do Menu..."; sleep 2;
+    echo "Saindo do Menu..."; exit 0; sleep 2;
 }
 
 case $OPC in
